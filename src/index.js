@@ -37,3 +37,6 @@ initialCards.forEach((cardData) => {
   const cardContainer = createCard (cardData, removeCard)
   placesList.append(cardContainer);
 });
+
+import '../pages/index.css';
+import { initialCards } from './cards.js';
