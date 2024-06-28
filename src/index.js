@@ -1,3 +1,7 @@
+import './pages/index.css';
+import { initialCards } from './cards.js';
+import {openModal} from './modal.js';
+
 // @todo: Темплейт карточки
 
 const cardTemplate = document.querySelector('#card-template').content;
@@ -37,6 +41,3 @@ initialCards.forEach((cardData) => {
   const cardContainer = createCard (cardData, removeCard)
   placesList.append(cardContainer);
 });
-
-import '../pages/index.css';
-import { initialCards } from './cards.js';
