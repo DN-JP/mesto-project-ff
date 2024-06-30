@@ -1,6 +1,6 @@
 import './pages/index.css';
 import { initialCards } from './cards.js';
-import {openModal} from './modal.js';
+import {} from './modal.js';
 
 // @todo: Темплейт карточки
 
@@ -41,3 +41,4 @@ initialCards.forEach((cardData) => {
   const cardContainer = createCard (cardData, removeCard)
   placesList.append(cardContainer);
 });
+
