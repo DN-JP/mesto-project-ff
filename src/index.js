@@ -1,6 +1,6 @@
 import './pages/index.css';
 import { initialCards } from './cards.js';
-import {} from './modal.js';
+import * as data from './modal.js';
 
 // @todo: Темплейт карточки
 

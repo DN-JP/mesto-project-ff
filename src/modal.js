@@ -8,6 +8,7 @@ const closePopupButtons = document.querySelectorAll('.popup__close');
 const profilePopup = document.querySelector('.popup_type_edit');
 const addCardPopup = document.querySelector('.popup_type_new-card');
 const popup = document.querySelector('.popup');
+const popupContent = document.querySelector('.popup__content');
 
 // Функции и слушатели модальных окон
 profileButton.addEventListener('click', () => {
@@ -17,6 +18,17 @@ profileButton.addEventListener('click', () => {
 addCardButton.addEventListener('click', () => {
   openPopup(addCardPopup)
 })
+
+popup.addEventListener('click', () => {
+  closeByOverlayClick(popup);
+})
+
+export const closeByOverlayClick = (evt) => {
+  if (!popupContent.contains(evt.target)) {
+    console.log('Clicked outside the popup content!');
+    closePopup(popup);
+  }
+}
 
 closePopupButtons.forEach((button) => {
   button.addEventListener('click', () => {
@@ -36,15 +48,15 @@ export const closePopup = (popup) => {
 
 export const closeByEsc = (evt) => {
   if (evt.key === 'Escape') {
-    const openedPopup = document.querySelector('.popup_is-opened');
-    closePopup(openedPopup);
+    const activePopup = document.querySelector('.popup_is-opened');
+    closePopup(activePopup);
   }
-}
+} 
 
 // Проверка класса
 
 document.addEventListener('click', (event) => {
-  console.log(`Target: ${event.target.className}
+  console.log(`Target: ${event.target.className};
 CurrentTarget: ${event.currentTarget.className}`)
 });
 
