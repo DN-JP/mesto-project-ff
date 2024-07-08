@@ -96,7 +96,7 @@ function removeCard(element) {
   element.remove();
 }
 
-function createCard (cardData, removeCard, likeHandler) {
+function createCard (cardData, removeCard) {
   const cardContainer = cardTemplate.querySelector('.places__item').cloneNode(true);
   
   const cardImg = cardContainer.querySelector('.card__image');
@@ -109,10 +109,6 @@ function createCard (cardData, removeCard, likeHandler) {
   removeButton.addEventListener('click', () => {
     removeCard(cardContainer)
   });
-
-  placesList.addEventListener('click', (evt) => {
-    likeHandler(evt);
-  })
   
   return cardContainer;
 }
@@ -125,10 +121,22 @@ const likeHandler = (evt) => {
     }
 }
 
+placesList.addEventListener('click', (evt) => {
+  likeHandler(evt);
+})
+
+// Увеличение изображений
+
+const clickImgHandler = () => {
+  if (evt.target.classList.contains('card__image')) {
+    evt.target.classList.toggle()
+  }
+}
+
 // Вывод дефолтных карточек
 
 initialCards.forEach((cardData) => {
-  const cardContainer = createCard (cardData, removeCard, likeHandler)
+  const cardContainer = createCard (cardData, removeCard, likeHandler);
   placesList.append(cardContainer);
 });
 
