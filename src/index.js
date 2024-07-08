@@ -2,10 +2,14 @@ import './pages/index.css';
 import { initialCards } from './components/cards.js';
 import { openPopup, closePopup, closeByEsc} from './components/modal.js';
 
-// Переменные
+// Элементы
+const placesList = document.querySelector('.places__list');
 const profileButton = document.querySelector('.profile__edit-button');
 const addCardButton = document.querySelector('.profile__add-button');
 const closePopupButtons = document.querySelectorAll('.popup__close');
+
+// Темплейт карточки
+const cardTemplate = document.querySelector('#card-template').content;
 
 // Модальные окна
 const popups = document.querySelectorAll('.popup');
@@ -52,7 +56,7 @@ profileButton.addEventListener('click', () => {
   openPopup(profilePopup);
 })
 
-// Новая карточка
+// Создание и удаление карточек
 
 let newPlaceForm = document.forms['new-place'];
 const cardNameInput = newPlaceForm.querySelector('.popup__input_type_card-name');
@@ -69,17 +73,9 @@ const handleCardFormSubmit = (evt) => {
       name: placeName,
       link: imgLink
     };
-  const cardContainer = createCard (cardData, removeCard);
-  placesList.append(cardContainer);
+  const cardContainer = createCard (cardData, removeCard, likeHandler);
+  placesList.prepend(cardContainer);
 }
-
-// newPlaceForm.addEventListener('submit', (evt) => {
-//   evt.preventDefault();
-//   const fd = new FormData(newPlaceForm);
-//   const fdObj = Object.fromEntries(fd);
-//   console.log(fdObj.link);
-//   fdObj.name
-// });
 
 addCardPopup.addEventListener('submit', (evt) => {
   handleCardFormSubmit(evt);
@@ -96,18 +92,11 @@ const clearCardForm = () => {
   cardUrlInput.value = "";
 }
 
+function removeCard(element) {
+  element.remove();
+}
 
-// @todo: Темплейт карточки
-
-const cardTemplate = document.querySelector('#card-template').content;
-
-// @todo: DOM узлы
-
-const placesList = document.querySelector('.places__list');
-
-// @todo: Функция создания карточки
-
-function createCard (cardData, removeCard) {
+function createCard (cardData, removeCard, likeHandler) {
   const cardContainer = cardTemplate.querySelector('.places__item').cloneNode(true);
   
   const cardImg = cardContainer.querySelector('.card__image');
@@ -121,19 +110,25 @@ function createCard (cardData, removeCard) {
     removeCard(cardContainer)
   });
 
+  placesList.addEventListener('click', (evt) => {
+    likeHandler(evt);
+  })
+  
   return cardContainer;
 }
 
-// @todo: Функция удаления карточки
+// Обработка лайка
 
-  function removeCard(element) {
-    element.remove();
-  }
+const likeHandler = (evt) => {
+    if (evt.target.classList.contains('card__like-button')) {
+      evt.target.classList.toggle('card__like-button_is-active');
+    }
+}
 
-// @todo: Вывести карточки на страницу
+// Вывод дефолтных карточек
 
 initialCards.forEach((cardData) => {
-  const cardContainer = createCard (cardData, removeCard)
+  const cardContainer = createCard (cardData, removeCard, likeHandler)
   placesList.append(cardContainer);
 });
 
