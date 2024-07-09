@@ -8,15 +8,23 @@ const profileButton = document.querySelector('.profile__edit-button');
 const addCardButton = document.querySelector('.profile__add-button');
 const closePopupButtons = document.querySelectorAll('.popup__close');
 
-// Темплейт карточки
-const cardTemplate = document.querySelector('#card-template').content;
-
-// Модальные окна
 const popups = document.querySelectorAll('.popup');
 const formElement = document.querySelector('.popup__form');
 const imgPopup = document.querySelector('.popup_type_image');
 const popupImg = document.querySelector('.popup__image');
 const popupImgCaption = document.querySelector('.popup__caption');
+
+const profilePopup = document.querySelector('.popup_type_edit');
+const nameInput = formElement.querySelector('.popup__input_type_name');
+const jobInput = formElement.querySelector('.popup__input_type_description');
+const profileTitle = document.querySelector('.profile__title');
+const profileJob = document.querySelector('.profile__description');
+
+// Темплейт карточки
+const cardTemplate = document.querySelector('#card-template').content;
+
+// Модальные окна
+
 
 popups.forEach((popup) => {
   popup.addEventListener('click', (evt) => {
@@ -35,11 +43,6 @@ closePopupButtons.forEach((button) => {
 
 // Профиль
 
-const profilePopup = document.querySelector('.popup_type_edit');
-const nameInput = formElement.querySelector('.popup__input_type_name');
-const jobInput = formElement.querySelector('.popup__input_type_description');
-const profileTitle = document.querySelector('.profile__title');
-const profileJob = document.querySelector('.profile__description');
 
 nameInput.value = profileTitle.textContent;
 jobInput.value = profileJob.textContent;
@@ -76,7 +79,7 @@ const handleCardFormSubmit = (evt) => {
       name: placeName,
       link: imgLink
     };
-  const cardContainer = createCard (cardData, removeCard, likeHandler);
+  const cardContainer = createCard (cardData, removeCard, likeHandler, imgClickHandler);
   placesList.prepend(cardContainer);
 }
 
@@ -107,6 +110,7 @@ function createCard (cardData, removeCard, likeHandler, imgClickHandler) {
   const removeButton = cardContainer.querySelector('.card__delete-button');
 
   cardImg.src = cardData.link;
+  cardImg.alt = cardData.name;
   cardTitle.textContent = cardData.name;
 
   removeButton.addEventListener('click', () => {
@@ -115,7 +119,8 @@ function createCard (cardData, removeCard, likeHandler, imgClickHandler) {
 
   placesList.addEventListener('click', likeHandler);
 
-  cardImg.addEventListener('click', imgClickHandler);
+  cardContainer.addEventListener('click', imgClickHandler);
+  
   return cardContainer;
 }
 
@@ -130,9 +135,9 @@ const likeHandler = (evt) => {
 // Увеличение изображений
 
 const imgClickHandler = (elem) => {
-  popupImg.alt = elem.name;
-  popupImg.src = elem.link;
-  popupImgCaption.textContent = elem.name;
+  popupImg.alt = elem.target.alt;
+  popupImg.src = elem.target.src;
+  popupImgCaption.textContent = elem.target.alt;
   if (elem.target.classList.contains('card__image')) {
     openPopup(imgPopup);
   }
