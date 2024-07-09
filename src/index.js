@@ -13,8 +13,10 @@ const cardTemplate = document.querySelector('#card-template').content;
 
 // Модальные окна
 const popups = document.querySelectorAll('.popup');
-const popupContent = document.querySelector('.popup__content');
 const formElement = document.querySelector('.popup__form');
+const imgPopup = document.querySelector('.popup_type_image');
+const popupImg = document.querySelector('.popup__image');
+const popupImgCaption = document.querySelector('.popup__caption');
 
 popups.forEach((popup) => {
   popup.addEventListener('click', (evt) => {
@@ -32,6 +34,7 @@ closePopupButtons.forEach((button) => {
 })
 
 // Профиль
+
 const profilePopup = document.querySelector('.popup_type_edit');
 const nameInput = formElement.querySelector('.popup__input_type_name');
 const jobInput = formElement.querySelector('.popup__input_type_description');
@@ -96,7 +99,7 @@ function removeCard(element) {
   element.remove();
 }
 
-function createCard (cardData, removeCard) {
+function createCard (cardData, removeCard, likeHandler, imgClickHandler) {
   const cardContainer = cardTemplate.querySelector('.places__item').cloneNode(true);
   
   const cardImg = cardContainer.querySelector('.card__image');
@@ -109,7 +112,10 @@ function createCard (cardData, removeCard) {
   removeButton.addEventListener('click', () => {
     removeCard(cardContainer)
   });
-  
+
+  placesList.addEventListener('click', likeHandler);
+
+  cardImg.addEventListener('click', imgClickHandler);
   return cardContainer;
 }
 
@@ -121,22 +127,21 @@ const likeHandler = (evt) => {
     }
 }
 
-placesList.addEventListener('click', (evt) => {
-  likeHandler(evt);
-})
-
 // Увеличение изображений
 
-const clickImgHandler = () => {
-  if (evt.target.classList.contains('card__image')) {
-    evt.target.classList.toggle()
+const imgClickHandler = (elem) => {
+  popupImg.alt = elem.name;
+  popupImg.src = elem.link;
+  popupImgCaption.textContent = elem.name;
+  if (elem.target.classList.contains('card__image')) {
+    openPopup(imgPopup);
   }
 }
 
 // Вывод дефолтных карточек
 
 initialCards.forEach((cardData) => {
-  const cardContainer = createCard (cardData, removeCard, likeHandler);
+  const cardContainer = createCard (cardData, removeCard, likeHandler, imgClickHandler);
   placesList.append(cardContainer);
 });
 
