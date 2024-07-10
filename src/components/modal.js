@@ -1,9 +1,11 @@
-// Функции и слушатели модальных окон
+// Функция открытия окна
 
 export const openPopup = (popup) => {
   popup.classList.add('popup_is-opened');
   document.addEventListener('keydown', closeByEsc);
 }
+
+// Функции закрытия окна
 
 export const closePopup = (popup) => {
   popup.classList.remove('popup_is-opened');

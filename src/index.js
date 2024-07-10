@@ -1,9 +1,10 @@
 import './pages/index.css';
 import { initialCards } from './components/cards.js';
 import { openPopup, closePopup, closeByEsc} from './components/modal.js';
+import { createCard, addCardPopup, placesList, cardNameInput, cardUrlInput, likeHandler} from './components/card.js';
 
 // Элементы
-const placesList = document.querySelector('.places__list');
+
 const profileButton = document.querySelector('.profile__edit-button');
 const addCardButton = document.querySelector('.profile__add-button');
 const closePopupButtons = document.querySelectorAll('.popup__close');
@@ -20,11 +21,7 @@ const jobInput = formElement.querySelector('.popup__input_type_description');
 const profileTitle = document.querySelector('.profile__title');
 const profileJob = document.querySelector('.profile__description');
 
-// Темплейт карточки
-const cardTemplate = document.querySelector('#card-template').content;
-
-// Модальные окна
-
+// Анимация и закрытие окна по оверлею
 
 popups.forEach((popup) => {
   popup.classList.add('popup_is-animated');
@@ -35,6 +32,8 @@ popups.forEach((popup) => {
   })
 })
 
+// Кнопка закрытия окна
+
 closePopupButtons.forEach((button) => {
   button.addEventListener('click', () => {
     const closestPopup = button.closest('.popup');
@@ -42,8 +41,7 @@ closePopupButtons.forEach((button) => {
   });
 })
 
-// Профиль
-
+// Обработка профиля
 
 nameInput.value = profileTitle.textContent;
 jobInput.value = profileJob.textContent;
@@ -63,13 +61,7 @@ profileButton.addEventListener('click', () => {
   openPopup(profilePopup);
 })
 
-// Создание и удаление карточек
-
-let newPlaceForm = document.forms['new-place'];
-const cardNameInput = newPlaceForm.querySelector('.popup__input_type_card-name');
-const cardUrlInput = newPlaceForm.querySelector('.popup__input_type_url');
-const cardSubmitButton = newPlaceForm.querySelector('.popup__button');
-const addCardPopup = document.querySelector('.popup_type_new-card');
+// Обработка и добавление новой карточки
 
 const handleCardFormSubmit = (evt) => {
   evt.preventDefault();
@@ -81,7 +73,11 @@ const handleCardFormSubmit = (evt) => {
       link: imgLink
     };
   const cardContainer = createCard (cardData, removeCard, likeHandler, imgClickHandler);
-  placesList.prepend(cardContainer);
+  addCardToList(cardContainer);
+}
+
+const addCardToList = (el) => {
+  placesList.prepend(el);
 }
 
 addCardPopup.addEventListener('submit', (evt) => {
@@ -101,36 +97,6 @@ const clearCardForm = () => {
 
 function removeCard(element) {
   element.remove();
-}
-
-const createCard = (cardData, removeCard, likeHandler, imgClickHandler) => {
-  const cardContainer = cardTemplate.querySelector('.places__item').cloneNode(true);
-  
-  const cardImg = cardContainer.querySelector('.card__image');
-  const cardTitle = cardContainer.querySelector('.card__title');
-  const removeButton = cardContainer.querySelector('.card__delete-button');
-
-  cardImg.src = cardData.link;
-  cardImg.alt = cardData.name;
-  cardTitle.textContent = cardData.name;
-
-  removeButton.addEventListener('click', () => {
-    removeCard(cardContainer)
-  });
-
-  placesList.addEventListener('click', likeHandler);
-
-  cardContainer.addEventListener('click', imgClickHandler);
-  
-  return cardContainer;
-}
-
-// Обработка лайка
-
-const likeHandler = (evt) => {
-    if (evt.target.classList.contains('card__like-button')) {
-      evt.target.classList.toggle('card__like-button_is-active');
-    }
 }
 
 // Увеличение изображений
