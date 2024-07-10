@@ -27,6 +27,7 @@ const cardTemplate = document.querySelector('#card-template').content;
 
 
 popups.forEach((popup) => {
+  popup.classList.add('popup_is-animated');
   popup.addEventListener('click', (evt) => {
     if (evt.target.classList.contains('popup_is-opened')) {
       closePopup(popup);
@@ -102,7 +103,7 @@ function removeCard(element) {
   element.remove();
 }
 
-function createCard (cardData, removeCard, likeHandler, imgClickHandler) {
+const createCard = (cardData, removeCard, likeHandler, imgClickHandler) => {
   const cardContainer = cardTemplate.querySelector('.places__item').cloneNode(true);
   
   const cardImg = cardContainer.querySelector('.card__image');
@@ -135,10 +136,10 @@ const likeHandler = (evt) => {
 // Увеличение изображений
 
 const imgClickHandler = (elem) => {
-  popupImg.alt = elem.target.alt;
-  popupImg.src = elem.target.src;
-  popupImgCaption.textContent = elem.target.alt;
   if (elem.target.classList.contains('card__image')) {
+    popupImg.alt = elem.target.alt;
+    popupImg.src = elem.target.src;
+    popupImgCaption.textContent = elem.target.alt;
     openPopup(imgPopup);
   }
 }
