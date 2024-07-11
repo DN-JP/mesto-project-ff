@@ -1,12 +1,4 @@
-// Переменные
-
-let newPlaceForm = document.forms['new-place'];
-export const cardNameInput = newPlaceForm.querySelector('.popup__input_type_card-name');
-export const cardUrlInput = newPlaceForm.querySelector('.popup__input_type_url');
-
-export const cardTemplate = document.querySelector('#card-template').content;
-export const addCardPopup = document.querySelector('.popup_type_new-card');
-export const placesList = document.querySelector('.places__list');
+import { cardTemplate, cardLikeButton } from "../index";
 
 // Функция создания карточек
 
@@ -16,6 +8,7 @@ export const createCard = (cardData, removeCard, likeHandler, imgClickHandler) =
   const cardImg = cardContainer.querySelector('.card__image');
   const cardTitle = cardContainer.querySelector('.card__title');
   const removeButton = cardContainer.querySelector('.card__delete-button');
+  const cardLikeButton = cardContainer.querySelector('.card__like-button');
 
   cardImg.src = cardData.link;
   cardImg.alt = cardData.name;
@@ -25,9 +18,9 @@ export const createCard = (cardData, removeCard, likeHandler, imgClickHandler) =
     removeCard(cardContainer)
   });
 
-  placesList.addEventListener('click', likeHandler);
+  cardLikeButton.addEventListener('click', likeHandler);
 
-  cardContainer.addEventListener('click', imgClickHandler);
+  cardImg.addEventListener('click', imgClickHandler);
   
   return cardContainer;
 }
@@ -35,7 +28,11 @@ export const createCard = (cardData, removeCard, likeHandler, imgClickHandler) =
 // Обработка лайка
 
 export const likeHandler = (evt) => {
-  if (evt.target.classList.contains('card__like-button')) {
     evt.target.classList.toggle('card__like-button_is-active');
-  }
+}
+
+// Функция удаления карточки
+
+export function removeCard(element) {
+  element.remove();
 }

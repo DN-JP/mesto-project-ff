@@ -9,19 +9,28 @@ export const openPopup = (popup) => {
 
 export const closePopup = (popup) => {
   popup.classList.remove('popup_is-opened');
+  document.removeEventListener('keydown', closeByEsc)
 }
 
-export const closeByEsc = (evt) => {
+const closeByEsc = (evt) => {
   if (evt.key === 'Escape') {
     const activePopup = document.querySelector('.popup_is-opened');
     closePopup(activePopup);
   }
 } 
 
+export const closeByClick = (popup) => {
+  popup.addEventListener('click', (evt) => {
+    if (evt.target.classList.contains('popup_is-opened') || evt.target.classList.contains('popup__close')) {
+      closePopup(popup);
+    }
+  })
+}
+
 // Проверка класса
 
-document.addEventListener('click', (event) => {
-  console.log(`Target: ${event.target.className};
-CurrentTarget: ${event.currentTarget.className}`)
-});
+// document.addEventListener('click', (event) => {
+//   console.log(`Target: ${event.target.className};
+// CurrentTarget: ${event.currentTarget.className}`)
+// });
 
