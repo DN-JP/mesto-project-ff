@@ -1,4 +1,4 @@
-import { cardTemplate, cardLikeButton } from "../index";
+const cardTemplate = document.querySelector('#card-template').content;
 
 // Функция создания карточек
 

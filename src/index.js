@@ -24,9 +24,8 @@ const newPlaceForm = document.forms['new-place'];
 const cardNameInput = newPlaceForm.querySelector('.popup__input_type_card-name');
 const cardUrlInput = newPlaceForm.querySelector('.popup__input_type_url');
 
-export const cardTemplate = document.querySelector('#card-template').content;
 const addCardPopup = document.querySelector('.popup_type_new-card');
-export const placesList = document.querySelector('.places__list');
+const placesList = document.querySelector('.places__list');
 
 // Анимация и клик по оверлею или кнопке закрытия окна
 
@@ -73,7 +72,7 @@ const addCardToList = (el) => {
   placesList.prepend(el);
 }
 
-addCardPopup.addEventListener('submit', (evt) => {
+newPlaceForm.addEventListener('submit', (evt) => {
   handleCardFormSubmit(evt);
   closePopup(addCardPopup);
   newPlaceForm.reset();
