@@ -1,7 +1,8 @@
 import './pages/index.css';
 import { initialCards } from './components/cards.js';
-import { openPopup, closePopup, closeByClick} from './components/modal.js';
-import { createCard, likeHandler, removeCard} from './components/card.js';
+import { openPopup, closePopup, closeByClick } from './components/modal.js';
+import { createCard, likeHandler, removeCard } from './components/card.js';
+import { setEventListeners } from './components/validation.js'
 
 // Элементы
 
