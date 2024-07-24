@@ -2,7 +2,7 @@ import './pages/index.css';
 import { initialCards } from './components/cards.js';
 import { openPopup, closePopup, closeByClick } from './components/modal.js';
 import { createCard, likeHandler, removeCard } from './components/card.js';
-import { setEventListeners } from './components/validation.js'
+import { validationConfig, enableValidation } from './components/validation.js'
 
 // Элементы
 
@@ -99,3 +99,10 @@ initialCards.forEach((cardData) => {
   placesList.append(cardContainer);
 });
 
+// Вызов валидации
+
+enableValidation(validationConfig);
+
+editProfileForm.addEventListener('input', (evt) => {
+  console.log(evt.target.validity.valid)
+})
