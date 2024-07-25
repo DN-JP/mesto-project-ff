@@ -1,34 +1,40 @@
 export const validationConfig = {
-  formSelector: '.popup__form',
-  inputSelector: '.popup__input',
-  submitButtonSelector: '.popup__button',
-  inactiveButtonClass: 'popup__button_disabled',
-  inputErrorClass: 'popup__input_type_error',
-  errorClass: 'popup__error_visible'
+  formSelector: ".popup__form",
+  inputSelector: ".popup__input",
+  submitButtonSelector: ".popup__button",
+  inactiveButtonClass: "popup__button_disabled",
+  inputErrorClass: "popup__input_type_error",
+  errorClass: "popup__error_visible",
 };
 
 export const enableValidation = (validationConfig) => {
-  const formList = Array.from(document.querySelectorAll(validationConfig.formSelector));
+  const formList = Array.from(
+    document.querySelectorAll(validationConfig.formSelector)
+  );
   formList.forEach((formEl) => {
     setEventListeners(formEl, validationConfig);
   });
 };
 
 const setEventListeners = (formEl, validationConfig) => {
-  const inputList = Array.from(formEl.querySelectorAll(validationConfig.inputSelector));
-  console.log(inputList);
+  const inputList = Array.from(
+    formEl.querySelectorAll(validationConfig.inputSelector)
+  );
+  const buttonEl = formEl.querySelector(validationConfig.submitButtonSelector);
   inputList.forEach((inputEl) => {
-    inputEl.addEventListener('input', () => {
-      isValid(formEl, inputEl)
+    inputEl.addEventListener("input", () => {
+      isValid(formEl, inputEl, validationConfig);
+      toggleButtonState(inputList, buttonEl, validationConfig);
     });
   });
 };
 
 const isValid = (formEl, inputEl, validationConfig) => {
+  console.log(`${inputEl.name} is checking validity...`)
   if (inputEl.validity.patternMismatch) {
     inputEl.setCustomValidity(inputEl.dataset.errorMessage);
   } else {
-    inputEl.setCustomValidity('');
+    inputEl.setCustomValidity("");
   }
 
   if (!inputEl.validity.valid) {
@@ -38,16 +44,36 @@ const isValid = (formEl, inputEl, validationConfig) => {
   }
 };
 
-const showInputError = (formEl, inputEl, errorMessage, validationConfig) => {
+const showInputError = (formEl, inputEl, validationConfig) => {
   const errorEl = formEl.querySelector(`.${inputEl.id}-error`);
-  inputEl.classList.add(validationConfig.inputErrorClass);
-  errorEl.textContent = errorMessage;
-  errorEl.classList.add(validationConfig.errorClass);
+  console.log(inputEl);
+  if (errorEl) {
+    console.log(`Adding error class to input ${inputEl.id}`);
+    inputEl.classList.add(validationConfig.inputErrorClass);
+    errorEl.textContent = inputEl.validationMessage;
+    errorEl.classList.add(validationConfig.errorClass);
+  } else {
+    console.log('Element not found!');
+  }
 };
 
 const hideInputError = (formEl, inputEl, validationConfig) => {
   const errorEl = formEl.querySelector(`.${inputEl.id}-error`);
-  inputEl.classList.remove(validationConfig.inputErrorClass);
-  errorEl.classList.remove(validationConfig.errorClass);
-  errorEl.textContent = '';
-}
+  if (errorEl) {
+    inputEl.classList.remove(validationConfig.inputErrorClass);
+    errorEl.classList.remove(validationConfig.errorClass);
+    errorEl.textContent = "";
+  }
+};
+
+const toggleButtonState = (inputList, buttonEl, validationConfig) => {
+  const hasInvalidInput = inputList.some((inputEl) => !inputEl.validity.valid);
+
+  if (hasInvalidInput) {
+    buttonEl.classList.add(validationConfig.inactiveButtonClass);
+    buttonEl.disabled = true;
+  } else {
+    buttonEl.classList.remove(validationConfig.inactiveButtonClass);
+    buttonEl.disabled = false;
+  }
+};
