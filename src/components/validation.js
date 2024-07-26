@@ -30,7 +30,6 @@ const setEventListeners = (formEl, validationConfig) => {
 };
 
 const isValid = (formEl, inputEl, validationConfig) => {
-  console.log(`${inputEl.name} is checking validity...`)
   if (inputEl.validity.patternMismatch) {
     inputEl.setCustomValidity(inputEl.dataset.errorMessage);
   } else {
@@ -46,9 +45,8 @@ const isValid = (formEl, inputEl, validationConfig) => {
 
 const showInputError = (formEl, inputEl, validationConfig) => {
   const errorEl = formEl.querySelector(`.${inputEl.id}-error`);
-  console.log(inputEl);
   if (errorEl) {
-    console.log(`Adding error class to input ${inputEl.id}`);
+    console.log(`Adding error class to ${inputEl.id}`);
     inputEl.classList.add(validationConfig.inputErrorClass);
     errorEl.textContent = inputEl.validationMessage;
     errorEl.classList.add(validationConfig.errorClass);
@@ -60,6 +58,7 @@ const showInputError = (formEl, inputEl, validationConfig) => {
 const hideInputError = (formEl, inputEl, validationConfig) => {
   const errorEl = formEl.querySelector(`.${inputEl.id}-error`);
   if (errorEl) {
+    console.log(`Removing error class from ${inputEl.id}`);
     inputEl.classList.remove(validationConfig.inputErrorClass);
     errorEl.classList.remove(validationConfig.errorClass);
     errorEl.textContent = "";
@@ -76,4 +75,18 @@ const toggleButtonState = (inputList, buttonEl, validationConfig) => {
     buttonEl.classList.remove(validationConfig.inactiveButtonClass);
     buttonEl.disabled = false;
   }
+};
+
+export const clearValidation = (formEl, validationConfig) => {
+  const inputList = Array.from(
+    formEl.querySelectorAll(validationConfig.inputSelector)
+  );
+  const buttonEl = formEl.querySelector(validationConfig.submitButtonSelector);
+  
+  inputList.forEach((inputEl) => {
+    hideInputError(formEl, inputEl, validationConfig);
+  });
+  
+  buttonEl.classList.add(validationConfig.inactiveButtonClass);
+  buttonEl.disabled = true;
 };

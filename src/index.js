@@ -2,7 +2,7 @@ import './pages/index.css';
 import { initialCards } from './components/cards.js';
 import { openPopup, closePopup, closeByClick } from './components/modal.js';
 import { createCard, likeHandler, removeCard } from './components/card.js';
-import { validationConfig, enableValidation } from './components/validation.js'
+import { validationConfig, enableValidation, clearValidation } from './components/validation.js'
 
 // Элементы
 
@@ -50,6 +50,7 @@ editProfileForm.addEventListener('submit', (evt) => {
 
 profileButton.addEventListener('click', () => {
   openPopup(profilePopup);
+  clearValidation(profilePopup, validationConfig);
   nameInput.value = profileTitle.textContent;
   jobInput.value = profileJob.textContent;
 })
@@ -81,6 +82,7 @@ newPlaceForm.addEventListener('submit', (evt) => {
 
 addCardButton.addEventListener('click', () => {
   openPopup(addCardPopup);
+  clearValidation(addCardPopup, validationConfig);
 })
 
 // Увеличение изображений
@@ -102,6 +104,8 @@ initialCards.forEach((cardData) => {
 // Вызов валидации
 
 enableValidation(validationConfig);
+
+clearValidation(profilePopup, validationConfig);
 
 editProfileForm.addEventListener('input', (evt) => {
   console.log(evt.target.validity.valid)
