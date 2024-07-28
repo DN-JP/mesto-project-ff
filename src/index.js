@@ -2,7 +2,11 @@ import './pages/index.css';
 import { initialCards } from './components/cards.js';
 import { openPopup, closePopup, closeByClick } from './components/modal.js';
 import { createCard, likeHandler, removeCard } from './components/card.js';
-import { validationConfig, enableValidation, clearValidation } from './components/validation.js'
+import { validationConfig, enableValidation, clearValidation } from './components/validation.js';
+import { config, checkResponse, currentUserInfo } from './components/api.js';
+
+checkResponse(config);
+currentUserInfo(config);
 
 // Элементы
 
