@@ -27,6 +27,8 @@ const fetchUserData = async () => {
     }
     const data = await res.json();
     console.log(data);
+    return data;
+    
   } catch (error) {
     console.log('Failed to fetch user data', error)
   }
