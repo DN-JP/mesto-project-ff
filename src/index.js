@@ -3,10 +3,10 @@ import { initialCards } from './components/cards.js';
 import { openPopup, closePopup, closeByClick } from './components/modal.js';
 import { createCard, likeHandler, removeCard } from './components/card.js';
 import { validationConfig, enableValidation, clearValidation } from './components/validation.js';
-import { config, checkResponse, currentUserInfo } from './components/api.js';
+import { config, fetchCards, fetchUserData } from './components/api.js';
 
-checkResponse(config);
-currentUserInfo(config);
+fetchCards(config);
+fetchUserData(config);
 
 // Элементы
 
@@ -40,6 +40,10 @@ popups.forEach((popup) => {
 })
 
 // Обработка профиля
+
+const getUserData = (name, description) => {
+  profileTitle.textContent = data.name;
+}
 
 const handleProfileFormSubmit = (evt) => {
   evt.preventDefault();
