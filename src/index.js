@@ -9,8 +9,6 @@ import {
 } from "./components/validation.js";
 import { config, fetchCards, fetchUserData } from "./components/api.js";
 
-fetchCards(config);
-
 // Элементы
 
 const profileButton = document.querySelector(".profile__edit-button");
@@ -46,26 +44,37 @@ popups.forEach((popup) => {
   closeByClick(popup);
 });
 
-// Обработка профиля
+// Обработка профиля и карточек сервера
 
-const getUserData = async () => {
+async function getProfileAndCards() {
   try {
-    const userData = await fetchUserData();
+    const [userData, cardsData] = await Promise.all([fetchUserData(), fetchCards()]);
+    console.log(userData, cardsData);
 
     profileTitle.textContent = userData.name;
     profileJob.textContent = userData.about;
+
+    cardsData.forEach((cardData) => {
+      const cardContainer = createCard(
+        cardData,
+        removeCard,
+        likeHandler,
+        imgClickHandler
+      );
+      placesList.append(cardContainer);
+    });
   } catch (error) {
-    console.log("Failed to fetch user data", error);
+    console.log('Error loading profile and cards:', error);
   }
-};
+}
 
-getUserData();
+getProfileAndCards();
 
-const handleProfileFormSubmit = (evt) => {
+function handleProfileFormSubmit(evt) {
   evt.preventDefault();
   profileTitle.textContent = nameInput.value;
   profileJob.textContent = jobInput.value;
-};
+}
 
 editProfileForm.addEventListener("submit", (evt) => {
   handleProfileFormSubmit(evt);
@@ -122,17 +131,17 @@ const imgClickHandler = (elem) => {
   openPopup(imgPopup);
 };
 
-// Вывод дефолтных карточек
+// Вывод карточек
 
-initialCards.forEach((cardData) => {
-  const cardContainer = createCard(
-    cardData,
-    removeCard,
-    likeHandler,
-    imgClickHandler
-  );
-  placesList.append(cardContainer);
-});
+// initialCards.forEach((cardData) => {
+//   const cardContainer = createCard(
+//     cardData,
+//     removeCard,
+//     likeHandler,
+//     imgClickHandler
+//   );
+//   placesList.append(cardContainer);
+// });
 
 // Вызов валидации
 

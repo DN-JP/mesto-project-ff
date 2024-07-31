@@ -13,8 +13,11 @@ const fetchCards = async () => {
   const res = await fetch(config.mainUrl, {
     headers: config.headers
   });
-  const data = await res.json();
-  console.log(data);
+  if (!res.ok) {
+    throw new Error(`Error fetching cards! Status: ${res.status}`)
+  }
+  const cardsData = await res.json();
+  return cardsData;
 }
 
 const fetchUserData = async () => {
@@ -23,13 +26,12 @@ const fetchUserData = async () => {
     headers: config.headers
     });
     if (!res.ok) {
-      console.log(`Error! Status: ${res.status}`);
+      throw new Error(`Error fetching user data! Status: ${res.status}`);
     }
     const data = await res.json();
-    console.log(data);
     return data;
-    
   } catch (error) {
-    console.log('Failed to fetch user data', error)
+    console.log('Failed to fetch user data', error);
+    throw error;
   }
 }
