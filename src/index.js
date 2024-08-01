@@ -7,7 +7,7 @@ import {
   enableValidation,
   clearValidation,
 } from "./components/validation.js";
-import { config, fetchCards, fetchUserData } from "./components/api.js";
+import { config, fetchCards, fetchUserData, patchProfile, postCard } from "./components/api.js";
 
 // Элементы
 
@@ -74,6 +74,8 @@ function handleProfileFormSubmit(evt) {
   evt.preventDefault();
   profileTitle.textContent = nameInput.value;
   profileJob.textContent = jobInput.value;
+
+  patchProfile(nameInput.value, jobInput.value);
 }
 
 editProfileForm.addEventListener("submit", (evt) => {
@@ -105,6 +107,7 @@ const handleCardFormSubmit = (evt) => {
     imgClickHandler
   );
   addCardToList(cardContainer);
+  postCard(cardData);
 };
 
 const addCardToList = (el) => {
@@ -149,6 +152,6 @@ enableValidation(validationConfig);
 
 clearValidation(profilePopup, validationConfig);
 
-editProfileForm.addEventListener("input", (evt) => {
-  console.log(evt.target.validity.valid);
-});
+// editProfileForm.addEventListener("input", (evt) => {
+//   console.log(evt.target.validity.valid);
+// });
