@@ -1,4 +1,4 @@
-export {config, fetchCards, fetchUserData, patchProfile, postCard};
+export {config, fetchCards, fetchUserData, patchProfile, postCard, likeCard, dislikeCard};
 
 const config = {
   cardsUrl: 'https://nomoreparties.co/v1/pwff-cohort-1/cards',
@@ -63,6 +63,38 @@ const postCard = async (cardData) => {
       body: JSON.stringify(cardData)
     });
   } catch (error) {
+    console.log('Failed to fetch user data', error);
+  };
+};
+
+// Card like/dislike 
+
+const likeCard = async (cardId) => {
+  try {
+    const res = await fetch(`${config.cardsUrl}/likes/${cardId}`, {
+      headers: config.headers,
+      method: 'PUT'
+    });
+    if (!res.ok) {
+      throw new Error(`Error fetching user data! Status: ${res.status}`);
+    } 
+    const data = await res.json();
+  } catch {
+    console.log('Failed to fetch user data', error);
+  };
+};
+
+const dislikeCard = async (cardId) => {
+  try {
+    const res = await fetch(`${config.cardsUrl}/likes/${cardId}`, {
+      headers: config.headers,
+      method: 'DELETE'
+    });
+    if (!res.ok) {
+      throw new Error(`Error fetching user data! Status: ${res.status}`);
+    } 
+    const data = await res.json();
+  } catch {
     console.log('Failed to fetch user data', error);
   };
 };

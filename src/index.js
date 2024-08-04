@@ -1,5 +1,4 @@
 import "./pages/index.css";
-import { initialCards } from "./components/cards.js";
 import { openPopup, closePopup, closeByClick } from "./components/modal.js";
 import { createCard, likeHandler, removeCard } from "./components/card.js";
 import {
@@ -7,7 +6,7 @@ import {
   enableValidation,
   clearValidation,
 } from "./components/validation.js";
-import { config, fetchCards, fetchUserData, patchProfile, postCard } from "./components/api.js";
+import { config, fetchCards, fetchUserData, patchProfile, postCard, likeCard, dislikeCard } from "./components/api.js";
 
 // Элементы
 
