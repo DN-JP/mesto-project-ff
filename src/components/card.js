@@ -1,4 +1,4 @@
-import { likeCard, dislikeCard } from "./api";
+import { addLike, removeLike, deleteCard } from "./api";
 
 const cardTemplate = document.querySelector("#card-template").content;
 
@@ -7,6 +7,7 @@ const cardTemplate = document.querySelector("#card-template").content;
 
 export const createCard = (
   cardData,
+  userId,
   removeCard,
   likeHandler,
   imgClickHandler
@@ -20,15 +21,23 @@ export const createCard = (
   const removeButton = cardContainer.querySelector(".card__delete-button");
   const cardLikeButton = cardContainer.querySelector(".card__like-button");
   const cardLikeCounter = cardContainer.querySelector(".card__like-button-counter");
+  const cardId = cardData._id;
 
   cardImg.src = cardData.link;
   cardImg.alt = cardData.name;
   cardTitle.textContent = cardData.name;
-  cardLikeCounter.textContent = cardData.likes.length;
 
-  removeButton.addEventListener("click", () => {
-    removeCard(cardContainer);
-  });
+  if (cardData.likes.length) {
+    cardLikeCounter.textContent = cardData.likes.length;
+  };
+
+  if (userId != cardData.owner._id) {
+    removeButton.classList.add('invisible');
+  } else {
+    removeButton.addEventListener("click", () => {
+    removeCard(cardContainer, cardId);
+    });
+  };
 
   cardLikeButton.addEventListener("click", likeHandler);
 
@@ -41,21 +50,17 @@ export const createCard = (
 
 export const likeHandler = async (evt, cardData) => {
   const likeButton = evt.target;
-  const likeCounter = likeButton
-    .closest(".card__like-button-container")
-    .querySelector(".card__like-button-counter");
-
+  console.log(cardData);
   let toggleLikeFunction;
 
-  if (likeButton.classList.contains(".card__like-button_is-active")) {
-    toggleLikeFunction = dislikeCard;
+  if (likeButton.classList.contains("card__like-button_is-active")) {
+    toggleLikeFunction = removeLike;
   } else {
-    toggleLikeFunction = likeCard;
+    toggleLikeFunction = addLike;
   }
 
   try {
     const res = await toggleLikeFunction(cardData._id);
-    likeCounter.textContent = res.likes.length;
     likeButton.classList.toggle("card__like-button_is-active");
   } catch (error) {
     console.error("Error updating like status:", error);
@@ -64,6 +69,7 @@ export const likeHandler = async (evt, cardData) => {
 
 // Функция удаления карточки
 
-export function removeCard(element) {
-  element.remove();
+export function removeCard(elem, cardId) {
+  deleteCard(cardId);
+  elem.remove();
 }

@@ -45,33 +45,33 @@
           <form class="popup__form" name="edit-profile" novalidate>
             <label class="form-field">
               <input
-              type="text"
-              name="name"
-              id="name-input"
-              class="popup__input popup__input_type_name"
-              placeholder="Имя"
-              minlength="2"
-              maxlength="40"
-              pattern="^[A-Za-zА-Яа-яЁё\-\s]+$"
-              data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы"
-              required
-            />
-            <span class="input-error name-input-error"></span>
+                type="text"
+                name="name"
+                id="name-input"
+                class="popup__input popup__input_type_name"
+                placeholder="Имя"
+                minlength="2"
+                maxlength="40"
+                pattern="^[A-Za-zА-Яа-яЁё\-\s]+$"
+                data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы"
+                required
+              />
+              <span class="input-error name-input-error"></span>
             </label>
             <label class="form-field">
-             <input
-              type="text"
-              name="description"
-              id="description-input"
-              class="popup__input popup__input_type_description"
-              placeholder="Занятие"
-              minlength="2"
-              maxlength="200"
-              pattern="^[A-Za-zА-Яа-яЁё\-\s]+$"
-              data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы"
-              required
-            />
-            <span class="input-error description-input-error"></span> 
+              <input
+                type="text"
+                name="description"
+                id="description-input"
+                class="popup__input popup__input_type_description"
+                placeholder="Занятие"
+                minlength="2"
+                maxlength="200"
+                pattern="^[A-Za-zА-Яа-яЁё\-\s]+$"
+                data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы"
+                required
+              />
+              <span class="input-error description-input-error"></span>
             </label>
             <button type="submit" class="button popup__button">
               Сохранить
@@ -85,35 +85,43 @@
           <h3 class="popup__title">Новое место</h3>
           <form class="popup__form" name="new-place">
             <label class="form-field">
-             <input
-              type="text"
-              name="card-name"
-              id="card-name"
-              class="popup__input popup__input_type_card-name"
-              placeholder="Название"
-              minlength="2"
-              maxlength="30"
-              pattern="^[A-Za-zА-Яа-яЁё\-\s]+$"
-              data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы"
-              required
-              /> 
+              <input
+                type="text"
+                name="card-name"
+                id="card-name"
+                class="popup__input popup__input_type_card-name"
+                placeholder="Название"
+                minlength="2"
+                maxlength="30"
+                pattern="^[A-Za-zА-Яа-яЁё\-\s]+$"
+                data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы"
+                required
+              />
               <span class="input-error card-name-error"></span>
             </label>
             <label class="form-field">
-             <input
-              type="url"
-              name="link"
-              id="card-link"
-              class="popup__input popup__input_type_url"
-              placeholder="Ссылка на картинку"
-              required
-              /> 
+              <input
+                type="url"
+                name="link"
+                id="card-link"
+                class="popup__input popup__input_type_url"
+                placeholder="Ссылка на картинку"
+                required
+              />
               <span class="input-error card-link-error"></span>
             </label>
             <button type="submit" class="button popup__button">
               Сохранить
             </button>
           </form>
+        </div>
+      </div>
+      <div>
+        <div class="popup popup__remove-card">
+          <button type="button" class="popup__close"></button>
+          <h3 class="popup__title">Удалить карточку?</h3>
+          <button type="submit" class="button popup__button">Да</button>
+          <button type="submit" class="button popup__button">Нет</button>
         </div>
       </div>
       <div class="popup popup_type_image">

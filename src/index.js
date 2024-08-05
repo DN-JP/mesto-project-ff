@@ -6,7 +6,7 @@ import {
   enableValidation,
   clearValidation,
 } from "./components/validation.js";
-import { config, fetchCards, fetchUserData, patchProfile, postCard, likeCard, dislikeCard } from "./components/api.js";
+import { fetchCards, fetchUserData, patchProfile, postCard, deleteCard, addLike, removeLike } from "./components/api.js";
 
 // Элементы
 
@@ -52,10 +52,12 @@ async function getProfileAndCards() {
 
     profileTitle.textContent = userData.name;
     profileJob.textContent = userData.about;
+    const userId = userData._id;
 
     cardsData.forEach((cardData) => {
       const cardContainer = createCard(
         cardData,
+        userId,
         removeCard,
         likeHandler,
         imgClickHandler
@@ -64,8 +66,8 @@ async function getProfileAndCards() {
     });
   } catch (error) {
     console.log('Error loading profile and cards:', error);
-  }
-}
+  };
+};
 
 getProfileAndCards();
 
@@ -101,6 +103,7 @@ const handleCardFormSubmit = (evt) => {
   };
   const cardContainer = createCard(
     cardData,
+    userId,
     removeCard,
     likeHandler,
     imgClickHandler
@@ -132,18 +135,6 @@ const imgClickHandler = (elem) => {
   popupImgCaption.textContent = elem.target.alt;
   openPopup(imgPopup);
 };
-
-// Вывод карточек
-
-// initialCards.forEach((cardData) => {
-//   const cardContainer = createCard(
-//     cardData,
-//     removeCard,
-//     likeHandler,
-//     imgClickHandler
-//   );
-//   placesList.append(cardContainer);
-// });
 
 // Вызов валидации
 
