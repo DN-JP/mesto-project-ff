@@ -36,6 +36,8 @@ const cardUrlInput = newPlaceForm.querySelector(".popup__input_type_url");
 const addCardPopup = document.querySelector(".popup_type_new-card");
 const placesList = document.querySelector(".places__list");
 
+let userId;
+
 // Анимация и клик по оверлею или кнопке закрытия окна
 
 popups.forEach((popup) => {
@@ -100,6 +102,8 @@ const handleCardFormSubmit = (evt) => {
   const cardData = {
     name: placeName,
     link: imgLink,
+    likes: [],
+    owner: {_id: userId}
   };
   const cardContainer = createCard(
     cardData,

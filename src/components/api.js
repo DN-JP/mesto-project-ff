@@ -81,6 +81,7 @@ const deleteCard = async (cardId) => {
       throw new Error(`Error fetching user data! Status: ${res.status}`);
     } 
     const data = await res.json();
+    return data;
   } catch (error) {
     console.log('Failed to fetch user data', error);
   };
