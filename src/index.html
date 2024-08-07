@@ -23,7 +23,11 @@
           <div
             class="profile__image"
             style="background-image: url(<%=require('./images/avatar.jpg')%>)"
-          ></div>
+          >
+          <div class="profile__img-overlay">
+            <img class="profile__img-change-icon" src="<%=require('./images/edit-icon.svg')%>"/>
+          </div>
+          </div>
           <div class="profile__info">
             <h1 class="profile__title"></h1>
             <button class="profile__edit-button" type="button"></button>
@@ -79,6 +83,22 @@
           </form>
         </div>
       </div>
+      <div class="popup popup_type_profile-img">
+        <div class="popup__content">
+          <button type="button" class="popup__close"></button>
+          <h3 class="popup__title">Обновить аватар</h3>
+          <form class="popup__form" name="profile-img" novalidate>
+            <input type="url"
+              name="img-link"
+              id="profile-img-link"
+              class="popup__input popup__input_type_profile-img-link"
+              placeholder="Ссылка на изображение"
+              required
+            />
+            <button type="submit" class="button popup__button">Сохранить</button>
+          </form>
+        </div>
+      </div>
       <div class="popup popup_type_new-card">
         <div class="popup__content">
           <button type="button" class="popup__close"></button>
@@ -116,12 +136,11 @@
           </form>
         </div>
       </div>
-      <div>
-        <div class="popup popup__remove-card">
+      <div class="popup popup_type_remove-card">
+        <div class="popup__content">
           <button type="button" class="popup__close"></button>
-          <h3 class="popup__title">Удалить карточку?</h3>
+          <h3 class="popup__title">Вы уверены?</h3>
           <button type="submit" class="button popup__button">Да</button>
-          <button type="submit" class="button popup__button">Нет</button>
         </div>
       </div>
       <div class="popup popup_type_image">

@@ -6,7 +6,13 @@ import {
   enableValidation,
   clearValidation,
 } from "./components/validation.js";
-import { fetchCards, fetchUserData, patchProfile, postCard, deleteCard, addLike, removeLike } from "./components/api.js";
+import {
+  fetchCards,
+  fetchUserData,
+  patchProfile,
+  postCard,
+  changeAvatar,
+} from "./components/api.js";
 
 // Элементы
 
@@ -19,6 +25,12 @@ const imgPopup = document.querySelector(".popup_type_image");
 const popupImg = document.querySelector(".popup__image");
 const popupImgCaption = document.querySelector(".popup__caption");
 
+const profileImg = document.querySelector(".profile__image");
+const profileImgForm = document.forms["profile-img"];
+const profileImgPopup = document.querySelector(".popup_type_profile-img");
+const profileImgInput = document.querySelector(
+  ".popup__input_type_profile-img-link"
+);
 const profilePopup = document.querySelector(".popup_type_edit");
 const nameInput = editProfileForm.querySelector(".popup__input_type_name");
 const jobInput = editProfileForm.querySelector(
@@ -49,7 +61,10 @@ popups.forEach((popup) => {
 
 async function getProfileAndCards() {
   try {
-    const [userData, cardsData] = await Promise.all([fetchUserData(), fetchCards()]);
+    const [userData, cardsData] = await Promise.all([
+      fetchUserData(),
+      fetchCards(),
+    ]);
     console.log(userData, cardsData);
 
     profileTitle.textContent = userData.name;
@@ -67,11 +82,13 @@ async function getProfileAndCards() {
       placesList.append(cardContainer);
     });
   } catch (error) {
-    console.log('Error loading profile and cards:', error);
-  };
-};
+    console.log("Error loading profile and cards:", error);
+  }
+}
 
 getProfileAndCards();
+
+// Редактирование профиля
 
 function handleProfileFormSubmit(evt) {
   evt.preventDefault();
@@ -93,6 +110,34 @@ profileButton.addEventListener("click", () => {
   jobInput.value = profileJob.textContent;
 });
 
+function handleProfileImgSubmit(evt) {
+  evt.preventDefault();
+  const imgLink = profileImgInput.value;
+  
+  profileImg.style.backgroundImage = `url(${imgLink})`;
+
+  changeAvatar(imgLink)
+   .then((data) => {
+    if (data) {
+      profileImg.style.backgroundImage = `url(${data.avatar})`;
+      closePopup(profileImgPopup);
+    }
+   })
+   .catch((error) => {
+    alert("Не удалось обновить аватар. Ошибка: ", error);
+   })
+}
+
+profileImg.addEventListener("click", () => {
+  openPopup(profileImgPopup);
+  clearValidation(profileImgPopup, validationConfig);
+});
+
+profileImgForm.addEventListener("submit", (evt) => {
+  handleProfileImgSubmit(evt);
+  closePopup(profileImgPopup);
+});
+
 // Обработка и добавление новой карточки
 
 const handleCardFormSubmit = (evt) => {
@@ -103,7 +148,7 @@ const handleCardFormSubmit = (evt) => {
     name: placeName,
     link: imgLink,
     likes: [],
-    owner: {_id: userId}
+    owner: { _id: userId },
   };
   const cardContainer = createCard(
     cardData,

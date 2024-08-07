@@ -12,6 +12,7 @@ export const enableValidation = (validationConfig) => {
     document.querySelectorAll(validationConfig.formSelector)
   );
   formList.forEach((formEl) => {
+    console.log(formEl);
     setEventListeners(formEl, validationConfig);
   });
 };

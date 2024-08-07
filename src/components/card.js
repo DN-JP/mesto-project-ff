@@ -1,7 +1,7 @@
 import { addLike, removeLike, deleteCard } from "./api";
+import { closePopup, openPopup } from "./modal";
 
 const cardTemplate = document.querySelector("#card-template").content;
-
 
 // Функция создания карточек
 
@@ -20,7 +20,9 @@ export const createCard = (
   const cardTitle = cardContainer.querySelector(".card__title");
   const removeButton = cardContainer.querySelector(".card__delete-button");
   const cardLikeButton = cardContainer.querySelector(".card__like-button");
-  const cardLikeCounter = cardContainer.querySelector(".card__like-button-counter");
+  const cardLikeCounter = cardContainer.querySelector(
+    ".card__like-button-counter"
+  );
   const cardId = cardData._id;
 
   cardImg.src = cardData.link;
@@ -29,17 +31,21 @@ export const createCard = (
 
   if (cardData.likes.length) {
     cardLikeCounter.textContent = cardData.likes.length;
-  };
+  }
+
+  if (cardData.likes.some(like => like._id === userId)) {
+    cardLikeButton.classList.add("card__like-button_is-active");
+  }
 
   if (userId != cardData.owner._id) {
-    removeButton.classList.add('invisible');
+    removeButton.classList.add("invisible");
   } else {
     removeButton.addEventListener("click", () => {
-    removeCard(cardContainer, cardId);
+      removeCard(cardContainer, cardId);
     });
-  };
+  }
 
-  cardLikeButton.addEventListener("click", likeHandler);
+  cardLikeButton.addEventListener("click", (evt) => likeHandler(evt, cardData));
 
   cardImg.addEventListener("click", imgClickHandler);
 
@@ -50,7 +56,6 @@ export const createCard = (
 
 export const likeHandler = async (evt, cardData) => {
   const likeButton = evt.target;
-  console.log(cardData);
   let toggleLikeFunction;
 
   if (likeButton.classList.contains("card__like-button_is-active")) {
@@ -61,7 +66,9 @@ export const likeHandler = async (evt, cardData) => {
 
   try {
     const res = await toggleLikeFunction(cardData._id);
+    const data = await res.json();
     likeButton.classList.toggle("card__like-button_is-active");
+    evt.target.nextElementSibling.textContent = data.likes.length;
   } catch (error) {
     console.error("Error updating like status:", error);
   }
@@ -70,6 +77,14 @@ export const likeHandler = async (evt, cardData) => {
 // Функция удаления карточки
 
 export function removeCard(elem, cardId) {
-  deleteCard(cardId);
-  elem.remove();
-}
+  const removeCardPopup = document.querySelector('.popup_type_remove-card');
+
+  openPopup(removeCardPopup);
+  const removeButton = removeCardPopup.querySelector('.popup__button');
+
+  removeButton.addEventListener("click", () => {
+    deleteCard(cardId);
+    elem.remove();
+    closePopup(removeCardPopup);
+  });
+};
