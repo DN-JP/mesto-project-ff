@@ -142,6 +142,8 @@ const changeAvatar = async (imgLink) => {
       throw new Error(`Error fetching user data! Status: ${res.status}`);
     }
     const data = await res.json();
+    console.log(data);
+    
     return data;
   } catch (error) {
     console.log("Failed to change avatar:", error);

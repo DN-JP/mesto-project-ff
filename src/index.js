@@ -69,6 +69,8 @@ async function getProfileAndCards() {
 
     profileTitle.textContent = userData.name;
     profileJob.textContent = userData.about;
+    profileImg.style.backgroundImage = `url(${userData.avatar})`;
+
     const userId = userData._id;
 
     cardsData.forEach((cardData) => {
@@ -92,11 +94,21 @@ getProfileAndCards();
 
 function handleProfileFormSubmit(evt) {
   evt.preventDefault();
+
+  const saveButton = evt.target.querySelector('.popup__button');
+  const restoreButtonState = saveButtonLoader(saveButton);
+
   profileTitle.textContent = nameInput.value;
   profileJob.textContent = jobInput.value;
 
-  patchProfile(nameInput.value, jobInput.value);
-}
+  patchProfile(nameInput.value, jobInput.value)
+    .then(() => {
+      closePopup(profilePopup);
+    })
+    .finally(() => {
+      restoreButtonState();
+    });
+};
 
 editProfileForm.addEventListener("submit", (evt) => {
   handleProfileFormSubmit(evt);
@@ -113,8 +125,10 @@ profileButton.addEventListener("click", () => {
 function handleProfileImgSubmit(evt) {
   evt.preventDefault();
   const imgLink = profileImgInput.value;
+  console.log("Submitting img link: ", imgLink);
   
-  profileImg.style.backgroundImage = `url(${imgLink})`;
+  const saveButton = evt.target.querySelector('.popup__button');
+  saveButtonLoader(saveButton);
 
   changeAvatar(imgLink)
    .then((data) => {
@@ -124,7 +138,7 @@ function handleProfileImgSubmit(evt) {
     }
    })
    .catch((error) => {
-    alert("Не удалось обновить аватар. Ошибка: ", error);
+    alert("Не удалось обновить аватар!", error);
    })
 }
 
@@ -135,13 +149,16 @@ profileImg.addEventListener("click", () => {
 
 profileImgForm.addEventListener("submit", (evt) => {
   handleProfileImgSubmit(evt);
-  closePopup(profileImgPopup);
 });
 
 // Обработка и добавление новой карточки
 
 const handleCardFormSubmit = (evt) => {
   evt.preventDefault();
+
+  const saveButton = evt.target.querySelector('.popup__button');
+  const restoreButtonState = saveButtonLoader(saveButton);
+
   const placeName = cardNameInput.value;
   const imgLink = cardUrlInput.value;
   const cardData = {
@@ -158,7 +175,14 @@ const handleCardFormSubmit = (evt) => {
     imgClickHandler
   );
   addCardToList(cardContainer);
-  postCard(cardData);
+
+  postCard(cardData)
+  .then(() => {
+    closePopup(addCardPopup);
+  })
+  .finally(() => {
+    restoreButtonState();
+  });
 };
 
 const addCardToList = (el) => {
@@ -167,7 +191,6 @@ const addCardToList = (el) => {
 
 newPlaceForm.addEventListener("submit", (evt) => {
   handleCardFormSubmit(evt);
-  closePopup(addCardPopup);
   newPlaceForm.reset();
 });
 
@@ -190,6 +213,21 @@ const imgClickHandler = (elem) => {
 enableValidation(validationConfig);
 
 clearValidation(profilePopup, validationConfig);
+
+// Состояние кнопки
+
+const saveButtonLoader = (button) => {
+  const originalText = button.textContent;
+  const loadingText = "Сохранение...";
+
+  button.disabled = true;
+  button.textContent = loadingText;
+
+  return () => {
+    button.textContent = originalText;
+    button.disabled = false;
+  };
+};
 
 // editProfileForm.addEventListener("input", (evt) => {
 //   console.log(evt.target.validity.valid);
