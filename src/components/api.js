@@ -19,7 +19,7 @@ const config = {
   },
 };
 
-// User data
+// Данные пользователя
 
 const fetchUserData = async () => {
   try {
@@ -56,7 +56,7 @@ const patchProfile = async (name, about) => {
   }
 };
 
-// Cards data
+// Данные карточек
 
 const fetchCards = async () => {
   const res = await fetch(config.cardsUrl, {
@@ -97,7 +97,7 @@ const deleteCard = async (cardId) => {
   }
 };
 
-// Card like/dislike
+// Постановка и удаление лайка
 
 const addLike = async (cardId) => {
   try {
@@ -129,7 +129,7 @@ const removeLike = async (cardId) => {
   }
 };
 
-// Update user avatar
+// Обновление аватара
 
 const changeAvatar = async (imgLink) => {
   try {

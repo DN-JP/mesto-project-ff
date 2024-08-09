@@ -122,6 +122,8 @@ profileButton.addEventListener("click", () => {
   jobInput.value = profileJob.textContent;
 });
 
+// Изменение изображения профиля
+
 function handleProfileImgSubmit(evt) {
   evt.preventDefault();
   const imgLink = profileImgInput.value;
@@ -229,6 +231,3 @@ const saveButtonLoader = (button) => {
   };
 };
 
-// editProfileForm.addEventListener("input", (evt) => {
-//   console.log(evt.target.validity.valid);
-// });
