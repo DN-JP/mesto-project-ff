@@ -1,12 +1,3 @@
-export const validationConfig = {
-  formSelector: ".popup__form",
-  inputSelector: ".popup__input",
-  submitButtonSelector: ".popup__button",
-  inactiveButtonClass: "popup__button_disabled",
-  inputErrorClass: "popup__input_type_error",
-  errorClass: "popup__error_visible",
-};
-
 export const enableValidation = (validationConfig) => {
   const formList = Array.from(
     document.querySelectorAll(validationConfig.formSelector)
@@ -51,7 +42,7 @@ const showInputError = (formEl, inputEl, validationConfig) => {
     errorEl.textContent = inputEl.validationMessage;
     errorEl.classList.add(validationConfig.errorClass);
   } else {
-    console.log('Element not found!');
+    console.log("Element not found!");
   }
 };
 
@@ -65,12 +56,16 @@ const hideInputError = (formEl, inputEl, validationConfig) => {
   }
 };
 
+const disableSubmitButton = (button, config) => {
+  button.classList.add(config.inactiveButtonClass);
+  button.disabled = true;
+};
+
 const toggleButtonState = (inputList, buttonEl, validationConfig) => {
   const hasInvalidInput = inputList.some((inputEl) => !inputEl.validity.valid);
 
   if (hasInvalidInput) {
-    buttonEl.classList.add(validationConfig.inactiveButtonClass);
-    buttonEl.disabled = true;
+    disableSubmitButton(buttonEl, validationConfig);
   } else {
     buttonEl.classList.remove(validationConfig.inactiveButtonClass);
     buttonEl.disabled = false;
@@ -82,11 +77,10 @@ export const clearValidation = (formEl, validationConfig) => {
     formEl.querySelectorAll(validationConfig.inputSelector)
   );
   const buttonEl = formEl.querySelector(validationConfig.submitButtonSelector);
-  
+
   inputList.forEach((inputEl) => {
     hideInputError(formEl, inputEl, validationConfig);
   });
-  
-  buttonEl.classList.add(validationConfig.inactiveButtonClass);
-  buttonEl.disabled = true;
+
+  disableSubmitButton(buttonEl, validationConfig);
 };

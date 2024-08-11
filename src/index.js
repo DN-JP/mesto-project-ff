@@ -1,11 +1,8 @@
 import "./pages/index.css";
 import { openPopup, closePopup, closeByClick } from "./components/modal.js";
 import { createCard, likeHandler, removeCard } from "./components/card.js";
-import {
-  validationConfig,
-  enableValidation,
-  clearValidation,
-} from "./components/validation.js";
+import { validationConfig } from "./components/config.js";
+import { enableValidation, clearValidation } from "./components/validation.js";
 import {
   fetchCards,
   fetchUserData,
@@ -71,7 +68,7 @@ async function getProfileAndCards() {
     profileJob.textContent = userData.about;
     profileImg.style.backgroundImage = `url(${userData.avatar})`;
 
-    const userId = userData._id;
+    userId = userData._id;
 
     cardsData.forEach((cardData) => {
       const cardContainer = createCard(
@@ -95,20 +92,24 @@ getProfileAndCards();
 function handleProfileFormSubmit(evt) {
   evt.preventDefault();
 
-  const saveButton = evt.target.querySelector('.popup__button');
+  const saveButton = evt.target.querySelector(".popup__button");
   const restoreButtonState = saveButtonLoader(saveButton);
 
-  profileTitle.textContent = nameInput.value;
-  profileJob.textContent = jobInput.value;
-
-  patchProfile(nameInput.value, jobInput.value)
-    .then(() => {
-      closePopup(profilePopup);
-    })
-    .finally(() => {
+  (async () => {
+    try {
+      const data = await patchProfile(nameInput.value, jobInput.value);
+      if (data) {
+        profileTitle.textContent = data.name;
+        profileJob.textContent = data.about;
+        closePopup(profilePopup);
+      }
+    } catch (error) {
+      console.log("Error updating profile:", error);
+    } finally {
       restoreButtonState();
-    });
-};
+    }
+  })();
+}
 
 editProfileForm.addEventListener("submit", (evt) => {
   handleProfileFormSubmit(evt);
@@ -128,20 +129,24 @@ function handleProfileImgSubmit(evt) {
   evt.preventDefault();
   const imgLink = profileImgInput.value;
   console.log("Submitting img link: ", imgLink);
-  
-  const saveButton = evt.target.querySelector('.popup__button');
-  saveButtonLoader(saveButton);
 
-  changeAvatar(imgLink)
-   .then((data) => {
-    if (data) {
-      profileImg.style.backgroundImage = `url(${data.avatar})`;
-      closePopup(profileImgPopup);
+  const saveButton = evt.target.querySelector(".popup__button");
+  const restoreButtonState = saveButtonLoader(saveButton);
+
+  (async () => {
+    try {
+      const data = await changeAvatar(imgLink);
+      if (data) {
+        profileImg.style.backgroundImage = `url(${data.avatar})`;
+        closePopup(profileImgPopup);
+      }
+    } catch (error) {
+      console.log("Error updating avatar:", error);
+    } finally {
+      restoreButtonState();
+      profileImgForm.reset();
     }
-   })
-   .catch((error) => {
-    alert("Не удалось обновить аватар!", error);
-   })
+  })();
 }
 
 profileImg.addEventListener("click", () => {
@@ -158,7 +163,7 @@ profileImgForm.addEventListener("submit", (evt) => {
 const handleCardFormSubmit = (evt) => {
   evt.preventDefault();
 
-  const saveButton = evt.target.querySelector('.popup__button');
+  const saveButton = evt.target.querySelector(".popup__button");
   const restoreButtonState = saveButtonLoader(saveButton);
 
   const placeName = cardNameInput.value;
@@ -169,22 +174,21 @@ const handleCardFormSubmit = (evt) => {
     likes: [],
     owner: { _id: userId },
   };
-  const cardContainer = createCard(
-    cardData,
-    userId,
-    removeCard,
-    likeHandler,
-    imgClickHandler
-  );
-  addCardToList(cardContainer);
-
   postCard(cardData)
-  .then(() => {
-    closePopup(addCardPopup);
-  })
-  .finally(() => {
-    restoreButtonState();
-  });
+    .then((resCardData) => {
+      const cardContainer = createCard(
+        resCardData,
+        userId,
+        removeCard,
+        likeHandler,
+        imgClickHandler
+      );
+      addCardToList(cardContainer);
+      closePopup(addCardPopup);
+    })
+    .finally(() => {
+      restoreButtonState();
+    });
 };
 
 const addCardToList = (el) => {
@@ -230,4 +234,3 @@ const saveButtonLoader = (button) => {
     button.disabled = false;
   };
 };
-

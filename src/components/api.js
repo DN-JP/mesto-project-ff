@@ -1,5 +1,4 @@
 export {
-  config,
   fetchCards,
   fetchUserData,
   patchProfile,
@@ -8,6 +7,7 @@ export {
   addLike,
   removeLike,
   changeAvatar,
+  handleResponse,
 };
 
 const config = {
@@ -19,41 +19,32 @@ const config = {
   },
 };
 
+const handleResponse = async (res) => {
+  if (!res.ok) {
+    throw new Error(`Error fetching data! Status: ${res.status}`);
+  }
+  return await res.json();
+};
+
 // Данные пользователя
 
 const fetchUserData = async () => {
-  try {
-    const res = await fetch(config.userDataUrl, {
-      headers: config.headers,
-    });
-    if (!res.ok) {
-      throw new Error(`Error fetching user data! Status: ${res.status}`);
-    }
-    const data = await res.json();
-    return data;
-  } catch (error) {
-    console.log("Failed to fetch user data", error);
-    throw error;
-  }
+  const res = await fetch(config.userDataUrl, {
+    headers: config.headers,
+  });
+  return await handleResponse(res);
 };
 
 const patchProfile = async (name, about) => {
-  try {
-    const res = await fetch(config.userDataUrl, {
-      method: "PATCH",
-      headers: config.headers,
-      body: JSON.stringify({
-        name: name,
-        about: about,
-      }),
-    });
-    if (!res.ok) {
-      throw new Error(`Error fetching user data! Status: ${res.status}`);
-    }
-    const data = await res.json();
-  } catch (error) {
-    console.log("Failed to fetch user data", error);
-  }
+  const res = await fetch(config.userDataUrl, {
+    method: "PATCH",
+    headers: config.headers,
+    body: JSON.stringify({
+      name: name,
+      about: about,
+    }),
+  });
+  return await handleResponse(res);
 };
 
 // Данные карточек
@@ -62,91 +53,49 @@ const fetchCards = async () => {
   const res = await fetch(config.cardsUrl, {
     headers: config.headers,
   });
-  if (!res.ok) {
-    throw new Error(`Error fetching cards! Status: ${res.status}`);
-  }
-  const cardsData = await res.json();
-  return cardsData;
+  return await handleResponse(res);
 };
 
 const postCard = async (cardData) => {
-  try {
-    const res = await fetch(config.cardsUrl, {
-      method: "POST",
-      headers: config.headers,
-      body: JSON.stringify(cardData),
-    });
-  } catch (error) {
-    console.log("Failed to fetch user data", error);
-  }
+  const res = await fetch(config.cardsUrl, {
+    method: "POST",
+    headers: config.headers,
+    body: JSON.stringify(cardData),
+  });
+  return await handleResponse(res);
 };
 
 const deleteCard = async (cardId) => {
-  try {
-    const res = await fetch(`${config.cardsUrl}/${cardId}`, {
-      method: "DELETE",
-      headers: config.headers,
-    });
-    if (!res.ok) {
-      throw new Error(`Error fetching user data! Status: ${res.status}`);
-    }
-    const data = await res.json();
-    return data;
-  } catch (error) {
-    console.log("Failed to fetch user data", error);
-  }
+  const res = await fetch(`${config.cardsUrl}/${cardId}`, {
+    method: "DELETE",
+    headers: config.headers,
+  });
+  return await handleResponse(res);
 };
 
 // Постановка и удаление лайка
 
 const addLike = async (cardId) => {
-  try {
-    const res = await fetch(`${config.cardsUrl}/likes/${cardId}`, {
-      headers: config.headers,
-      method: "PUT",
-    });
-    if (!res.ok) {
-      throw new Error(`Error fetching user data! Status: ${res.status}`);
-    }
-    return res;
-  } catch {
-    console.log("Failed to add like", error);
-  }
+  return await fetch(`${config.cardsUrl}/${cardId}/likes`, {
+    method: "PUT",
+    headers: config.headers,
+  });
 };
 
 const removeLike = async (cardId) => {
-  try {
-    const res = await fetch(`${config.cardsUrl}/likes/${cardId}`, {
-      headers: config.headers,
-      method: "DELETE",
-    });
-    if (!res.ok) {
-      throw new Error(`Error fetching user data! Status: ${res.status}`);
-    }
-    return res;
-  } catch {
-    console.log("Failed to remove like:", error);
-  }
+  return await fetch(`${config.cardsUrl}/${cardId}/likes`, {
+    method: "DELETE",
+    headers: config.headers,
+  });
 };
 
 // Обновление аватара
 
 const changeAvatar = async (imgLink) => {
-  try {
-    const res = await fetch(`${config.userDataUrl}/avatar`, {
-      headers: config.headers,
-      method: "PATCH",
-      body: JSON.stringify({ avatar: imgLink }),
-    });
-    if (!res.ok) {
-      throw new Error(`Error fetching user data! Status: ${res.status}`);
-    }
-    const data = await res.json();
-    console.log(data);
-    
-    return data;
-  } catch (error) {
-    console.log("Failed to change avatar:", error);
-    throw error;
-  }
+  const res = await fetch(`${config.userDataUrl}/avatar`, {
+    headers: config.headers,
+    method: "PATCH",
+    body: JSON.stringify({ avatar: imgLink }),
+  });
+  return await handleResponse(res);
 };

@@ -1,4 +1,4 @@
-import { addLike, removeLike, deleteCard } from "./api";
+import { addLike, removeLike, deleteCard, handleResponse } from "./api";
 import { closePopup, openPopup } from "./modal";
 
 const cardTemplate = document.querySelector("#card-template").content;
@@ -33,7 +33,7 @@ export const createCard = (
     cardLikeCounter.textContent = cardData.likes.length;
   }
 
-  if (cardData.likes.some(like => like._id === userId)) {
+  if (cardData.likes.some((like) => like._id === userId)) {
     cardLikeButton.classList.add("card__like-button_is-active");
   }
 
@@ -56,17 +56,15 @@ export const createCard = (
 
 export const likeHandler = async (evt, cardData) => {
   const likeButton = evt.target;
-  let toggleLikeFunction;
-
-  if (likeButton.classList.contains("card__like-button_is-active")) {
-    toggleLikeFunction = removeLike;
-  } else {
-    toggleLikeFunction = addLike;
-  }
+  const toggleLikeFunction = likeButton.classList.contains(
+    "card__like-button_is-active"
+  )
+    ? removeLike
+    : addLike;
 
   try {
     const res = await toggleLikeFunction(cardData._id);
-    const data = await res.json();
+    const data = await handleResponse(res);
     likeButton.classList.toggle("card__like-button_is-active");
     evt.target.nextElementSibling.textContent = data.likes.length;
   } catch (error) {
@@ -77,14 +75,18 @@ export const likeHandler = async (evt, cardData) => {
 // Функция удаления карточки
 
 export function removeCard(elem, cardId) {
-  const removeCardPopup = document.querySelector('.popup_type_remove-card');
+  const removeCardPopup = document.querySelector(".popup_type_remove-card");
+  const removeButton = removeCardPopup.querySelector(".popup__button");
 
+  removeButton.onclick = async () => {
+    try {
+      await deleteCard(cardId);
+      elem.remove();
+      closePopup(removeCardPopup);
+      removeButton.onclick = null;
+    } catch (error) {
+      console.log("Error deleting card:", error);
+    }
+  };
   openPopup(removeCardPopup);
-  const removeButton = removeCardPopup.querySelector('.popup__button');
-
-  removeButton.addEventListener("click", () => {
-    deleteCard(cardId);
-    elem.remove();
-    closePopup(removeCardPopup);
-  });
-};
+}
