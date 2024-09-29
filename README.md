@@ -31,4 +31,3 @@ Users of this app will be able to:
  * Edit their profile (change their profile information and avatar).
 
 Link to repo: https://dn-jp.github.io/mesto-project-ff/  
-Link gh-pages:  https://dn-jp.github.io/mesto-project-ff
