@@ -3,7 +3,7 @@ import { closePopup, openPopup } from "./modal";
 
 const cardTemplate = document.querySelector("#card-template").content;
 
-// Функция создания карточек
+// Card creation
 
 export const createCard = (
   cardData,
@@ -52,7 +52,7 @@ export const createCard = (
   return cardContainer;
 };
 
-// Обработка лайка
+// Like handler
 
 export const likeHandler = async (evt, cardData) => {
   const likeButton = evt.target;
@@ -72,7 +72,7 @@ export const likeHandler = async (evt, cardData) => {
   }
 };
 
-// Функция удаления карточки
+// Remove card function
 
 export function removeCard(elem, cardId) {
   const removeCardPopup = document.querySelector(".popup_type_remove-card");

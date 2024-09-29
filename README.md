@@ -21,5 +21,14 @@ Mesto is a single-page website that allows users to share photographs. It has be
 * Adaptive UI;
 * Media Queries
 
+### Application functionality
+
+Users of this app will be able to:
+
+ * Upload photos with captions.
+ * Delete them if they change their mind.
+ * Like each other's photos.
+ * Edit their profile (change their profile information and avatar).
+
 Link to repo: https://dn-jp.github.io/mesto-project-ff/  
 Link gh-pages:  https://dn-jp.github.io/mesto-project-ff

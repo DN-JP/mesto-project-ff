@@ -26,7 +26,7 @@ const handleResponse = async (res) => {
   return await res.json();
 };
 
-// Данные пользователя
+// User data
 
 const fetchUserData = async () => {
   const res = await fetch(config.userDataUrl, {
@@ -47,7 +47,7 @@ const patchProfile = async (name, about) => {
   return await handleResponse(res);
 };
 
-// Данные карточек
+// Card data
 
 const fetchCards = async () => {
   const res = await fetch(config.cardsUrl, {
@@ -73,7 +73,7 @@ const deleteCard = async (cardId) => {
   return await handleResponse(res);
 };
 
-// Постановка и удаление лайка
+// Like handlers
 
 const addLike = async (cardId) => {
   return await fetch(`${config.cardsUrl}/${cardId}/likes`, {
@@ -89,7 +89,7 @@ const removeLike = async (cardId) => {
   });
 };
 
-// Обновление аватара
+// Update avatar
 
 const changeAvatar = async (imgLink) => {
   const res = await fetch(`${config.userDataUrl}/avatar`, {
